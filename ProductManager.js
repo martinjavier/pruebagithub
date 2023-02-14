@@ -1,8 +1,12 @@
 const fs = require("fs");
 
 class ProductManager {
-  #path = "./Productos.json";
+  #path;
   #amount = 0;
+
+  constructor(path) {
+    this.#path = path;
+  }
 
   async addProduct(title, description, price, thumbnail, code, stock) {
     // Recupero los productos
@@ -111,10 +115,7 @@ class ProductManager {
       }
     });
     try {
-      await fs.promises.writeFile(
-        "./Productos.json",
-        JSON.stringify(allExceptOne)
-      );
+      await fs.promises.writeFile(this.#path, JSON.stringify(allExceptOne));
     } catch (err) {
       console.error(err);
     }
@@ -123,7 +124,7 @@ class ProductManager {
 
 async function main() {
   // Instancio un objeto de la clase
-  const manager = new ProductManager();
+  const manager = new ProductManager("./Productos.json");
   // Muestro los Productos existentes
   console.log(await manager.getProducts());
   // Creo el primer Producto
